@@ -312,4 +312,7 @@
     <string-array name="config_biometric_sensors" translatable="false" >
         <item>0:2:15</item> <!-- ID0:Fingerprint:Strong -->
     </string-array>
+
+    <!-- Whether we have a multi coloured battery LED or not -->
+    <bool name="config_multiColorBatteryLed">false</bool>
 </resources>
