@@ -21,6 +21,10 @@ $(call inherit-product-if-exists, vendor/google/psu/google-psu.mk)
 PRODUCT_DEXPREOPT_SPEED_APPS += \
     SystemUI
 
+# Component overrides
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/configs/component-overrides.xml:$(TARGET_COPY_OUT_VENDOR)/etc/sysconfig/component-overrides.xml
+
 # Overlays
 DEVICE_PACKAGE_OVERLAYS += \
     $(LOCAL_PATH)/overlay
