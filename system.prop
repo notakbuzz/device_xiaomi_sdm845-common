@@ -60,11 +60,11 @@ sdm.debug.disable_inline_rotator_secure=1
 
 # IMS
 persist.vendor.ims.disableUserAgent=0
+persist.radio.calls.on.ims=1
 
 # Media
 debug.stagefright.omx_default_rank.sw-audio=1
 debug.stagefright.omx_default_rank=0
-media.settings.xml=/vendor/etc/media_profiles_vendor.xml
 
 # Memory optimizations
 ro.vendor.qti.sys.fw.bservice_enable=true
@@ -79,7 +79,10 @@ ro.boot.vendor.overlay.theme=com.android.internal.systemui.navbar.gestural
 ro.vendor.qti.va_aosp.support=1
 
 # RCS
-persist.rcs.supported=0
+persist.rcs.supported=1
+persist.radio.rat_on=combine
+persist.radio.data_ltd_sys_ind=1
+persist.radio.data_con_rprt=1
 
 # RIL
 DEVICE_PROVISIONED=1
