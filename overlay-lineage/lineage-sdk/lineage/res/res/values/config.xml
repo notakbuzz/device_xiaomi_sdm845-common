@@ -16,4 +16,10 @@
 <resources>
     <!-- Whether device has screen with higher aspect ratio -->
     <bool name="config_haveHigherAspectRatioScreen">true</bool>
+
+    <!-- Battery Health -->
+    <string name="config_batChargeCycle">/sys/class/power_supply/bms/cycle_count</string>
+    <string name="config_batDesCap">/sys/class/power_supply/bms/charge_full_design</string>
+    <string name="config_batCurCap">/sys/class/power_supply/bms/charge_full</string>
+    <bool name="config_supportBatteryHealth">true</bool>
 </resources>
