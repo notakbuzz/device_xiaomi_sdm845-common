@@ -75,78 +75,10 @@ static uint32_t getBrightness(const LightState& state) {
     return (77 * red + 150 * green + 29 * blue) >> 8;
 }
 
-static uint32_t rgbToBrightness(const LightState& state) {
-    uint32_t color = state.color & 0x00ffffff;
-    return ((77 * ((color >> 16) & 0xff))
-            + (150 * ((color >> 8) & 0xff))
-            + (29 * (color & 0xff))) >> 8;
-}
-
 Light::Light() {
     mLights.emplace(Type::ATTENTION, std::bind(&Light::handleNotification, this, std::placeholders::_1, 0));
-    mLights.emplace(Type::BACKLIGHT, std::bind(&Light::handleBacklight, this, std::placeholders::_1));
-    mLights.emplace(Type::BATTERY, std::bind(&Light::handleBattery, this, std::placeholders::_1));
-    mLights.emplace(Type::NOTIFICATIONS, std::bind(&Light::handleNotification, this, std::placeholders::_1, 1));
-}
-
-void Light::handleBacklight(const LightState& state) {
-    int maxBrightness = get("/sys/class/backlight/panel0-backlight/max_brightness", -1);
-    if (maxBrightness < 0) {
-        maxBrightness = kDefaultMaxBrightness;
-    }
-    uint32_t sentBrightness = rgbToBrightness(state);
-    uint32_t brightness = sentBrightness * maxBrightness / kDefaultMaxBrightness;
-    LOG(DEBUG) << "Writing backlight brightness " << brightness
-               << " (orig " << sentBrightness << ")";
-    set("/sys/class/backlight/panel0-backlight/brightness", brightness);
-}
-
-void Light::handleBattery(const LightState& state) {
-    uint32_t whiteBrightness = getBrightness(state);
-
-    uint32_t onMs = state.flashMode == Flash::TIMED ? state.flashOnMs : 0;
-    uint32_t offMs = state.flashMode == Flash::TIMED ? state.flashOffMs : 0;
-
-    auto getScaledDutyPercent = [](int brightness) -> std::string {
-        std::string output;
-        for (int i = 0; i <= kRampSteps; i++) {
-            if (i != 0) {
-                output += ",";
-            }
-            if (i <= kRampSteps / 2) {
-                output += "0";
-            } else {
-                output += std::to_string((i - kRampSteps / 2) * 100 * brightness /
-                                         (kDefaultMaxBrightness * (kRampSteps/2)));
-            }
-        }
-        return output;
-    };
-
-    // Disable blinking to start
-    set("/sys/class/leds/white/blink", 0);
-
-    if (onMs > 0 && offMs > 0) {
-        uint32_t pauseLo, pauseHi, stepDuration;
-        stepDuration = 10;
-        if (stepDuration * kRampSteps > onMs) {
-            pauseHi = 0;
-        } else {
-            pauseHi = onMs - kRampSteps * stepDuration;
-            pauseLo = offMs - kRampSteps * stepDuration;
-        }
-
-        set("/sys/class/leds/white/start_idx", 0);
-        set("/sys/class/leds/white/duty_pcts", getScaledDutyPercent(whiteBrightness));
-        set("/sys/class/leds/white/pause_lo", pauseLo);
-        set("/sys/class/leds/white/pause_hi", pauseHi);
-        set("/sys/class/leds/white/ramp_step_ms", stepDuration);
-
-        // Start blinking
-        set("/sys/class/leds/white/blink", 1);
-    } else {
-        set("/sys/class/leds/white/brightness", whiteBrightness);
-    }
+    mLights.emplace(Type::BATTERY, std::bind(&Light::handleNotification, this, std::placeholders::_1, 1));
+    mLights.emplace(Type::NOTIFICATIONS, std::bind(&Light::handleNotification, this, std::placeholders::_1, 2));
 }
 
 void Light::handleNotification(const LightState& state, size_t index) {
