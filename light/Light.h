@@ -1,9 +1,6 @@
 /*
-<<<<<<< HEAD
- * Copyright (C) 2018-2019 The LineageOS Project
-=======
  * Copyright (C) 2018-2020 The LineageOS Project
->>>>>>> 636401b... sdm845-common: lights: Remove LCD backlight handling
+ * Copyright (C) 2020 The PixelExperience Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -49,16 +46,11 @@ class Light : public ILight {
     Return<void> getSupportedTypes(getSupportedTypes_cb _hidl_cb) override;
 
   private:
-<<<<<<< HEAD
-    void handleBacklight(const LightState& state);
-    void handleBattery(const LightState& state);
-=======
->>>>>>> 636401b... sdm845-common: lights: Remove LCD backlight handling
     void handleNotification(const LightState& state, size_t index);
 
     std::mutex mLock;
     std::unordered_map<Type, std::function<void(const LightState&)>> mLights;
-    std::array<LightState, 2> mLightStates;
+    std::array<LightState, 3> mLightStates;
 };
 
 }  // namespace implementation
