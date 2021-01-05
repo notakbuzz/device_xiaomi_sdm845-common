@@ -159,6 +159,10 @@ PRODUCT_PACKAGES += \
     vendor.display.config@2.0 \
     vendor.qti.hardware.display.allocator@1.0-service
 
+PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
+    ro.surface_flinger.has_HDR_display=true \
+    ro.surface_flinger.use_color_management=true
+
 # DRM
 PRODUCT_PACKAGES += \
     android.hardware.drm@1.0-impl:64 \
