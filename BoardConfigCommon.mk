@@ -40,6 +40,8 @@ TARGET_KERNEL_ARCH := arm64
 ifeq ($(TARGET_PREBUILT_KERNEL),)
   TARGET_KERNEL_CLANG_COMPILE := true
   TARGET_KERNEL_SOURCE := kernel/xiaomi/sdm845
+  TARGET_KERNEL_CLANG_VERSION := proton
+  TARGET_KERNEL_CLANG_PATH := $(shell pwd)/prebuilts/clang/host/linux-x86/clang-$(TARGET_KERNEL_CLANG_VERSION)
 endif
 
 # Platform
